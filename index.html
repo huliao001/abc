@@ -1,239 +1,256 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人主页</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HU LIAO · 个人站</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23c6c6dc'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%232a2a2e' font-family='sans-serif' font-weight='900'>H</text></svg>">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Archivo:wght@700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap">
+<style>
+  :root{
+    --lilac:#c6c6dc;
+    --paper:#f1f0ec;
+    --ink:#2a2a2e;
+    --ink-soft:#56565e;
+    --warm-white:#f5f3ea;
+    --line:rgba(42,42,46,.28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+    color:var(--ink);
+    background:var(--lilac);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* ===== 视图切换 ===== */
+  .view{
+    position:fixed;inset:0;
+    opacity:0;visibility:hidden;
+    transform:translateY(14px);
+    transition:opacity .5s ease,transform .5s ease,visibility .5s;
+    overflow-y:auto;
+  }
+  .view.active{opacity:1;visibility:visible;transform:translateY(0);}
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-        }
+  /* ============ 视图一：首页 ============ */
+  #hero{background:var(--lilac);}
+  .hero-inner{position:relative;height:100%;min-height:640px;max-width:1200px;margin:0 auto;}
 
-        /* 动态光斑背景 */
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: float 8s ease-in-out infinite;
-        }
+  .hero-title{
+    position:absolute;top:2vh;left:50%;transform:translateX(-50%);
+    font-family:'Archivo','Noto Sans SC',sans-serif;
+    font-weight:900;
+    font-size:clamp(64px,15vw,220px);
+    line-height:.9;letter-spacing:.02em;
+    color:var(--warm-white);
+    white-space:nowrap;user-select:none;
+  }
+  .hero-intro{
+    position:absolute;left:6%;top:30%;max-width:300px;color:var(--warm-white);
+  }
+  .hero-intro .tag{
+    font-family:'Archivo',sans-serif;font-weight:700;font-size:12px;
+    letter-spacing:.28em;color:#ffffff;margin-bottom:14px;
+  }
+  .hero-intro p{font-size:15px;line-height:1.9;font-weight:400;color:#ffffff;}
 
-        .blob-1 {
-            width: 500px;
-            height: 500px;
-            background: #ff6b9d;
-            top: -150px;
-            left: -150px;
-        }
+  .hero-avatar{
+    position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+    height:70%;max-height:580px;
+  }
+  .hero-avatar img{height:100%;width:auto;display:block;filter:drop-shadow(0 24px 30px rgba(60,60,90,.25));}
 
-        .blob-2 {
-            width: 400px;
-            height: 400px;
-            background: #4ecdc4;
-            bottom: -100px;
-            right: -100px;
-            animation-delay: -3s;
-        }
+  .hero-contact{
+    position:absolute;right:6%;bottom:110px;color:var(--warm-white);font-size:14px;
+  }
+  .hero-contact .row{display:flex;gap:14px;padding:7px 0;border-top:1px solid rgba(245,243,234,.35);min-width:230px;}
+  .hero-contact .row:last-child{border-bottom:1px solid rgba(245,243,234,.35);}
+  .hero-contact .k{color:#ffffff;opacity:.75;width:52px;flex-shrink:0;}
+  .hero-contact .v{color:#ffffff;}
 
-        .blob-3 {
-            width: 300px;
-            height: 300px;
-            background: #a855f7;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation-delay: -6s;
-        }
+  /* 认识我按钮（参考图红框位置：右下） */
+  .cta-wrap{position:absolute;right:6%;bottom:48px;}
+  .btn-know{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--ink);color:var(--warm-white);
+    border:none;cursor:pointer;
+    font-family:'Noto Sans SC',sans-serif;font-size:16px;font-weight:500;letter-spacing:.12em;
+    padding:16px 38px;border-radius:999px;
+    transition:transform .2s ease,background .2s ease;
+  }
+  .btn-know:hover{background:#111114;transform:translateY(-2px);}
+  .btn-know svg{width:18px;height:18px;}
 
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
+  /* ============ 视图二：我的奇妙世界 ============ */
+  #world{background:var(--paper);}
+  .world-inner{position:relative;min-height:100%;max-width:1200px;margin:0 auto;padding:56px 24px 80px;}
+  .world-eyebrow{
+    text-align:center;font-family:'Archivo',sans-serif;font-size:12px;letter-spacing:.3em;
+    color:var(--ink-soft);margin-bottom:10px;
+  }
+  .world-title{
+    text-align:center;font-weight:900;font-size:clamp(36px,6vw,72px);letter-spacing:.04em;color:var(--ink);
+  }
+  .world-sub{text-align:center;font-size:15px;color:var(--ink-soft);margin-top:12px;font-weight:400;}
 
-        /* 主卡片 - 玻璃拟态 */
-        .card {
-            position: relative;
-            z-index: 10;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
-            padding: 60px 80px;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-            animation: fadeInUp 1s ease-out;
-        }
+  .world-stage{position:relative;margin-top:20px;height:560px;max-width:1080px;margin-left:auto;margin-right:auto;}
+  .world-avatar{position:absolute;left:50%;bottom:0;transform:translateX(-50%);height:400px;z-index:2;}
+  .world-avatar img{height:100%;width:auto;display:block;filter:drop-shadow(0 18px 24px rgba(0,0,0,.18));}
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+  /* 扇形环绕卡片 */
+  .card{
+    position:absolute;width:210px;--r:0deg;
+    background:#fff;border-radius:10px;overflow:hidden;
+    box-shadow:0 14px 30px rgba(0,0,0,.16);z-index:3;
+    transform:rotate(var(--r));
+    transition:transform .25s ease,box-shadow .25s ease;cursor:default;
+  }
+  .card:hover{transform:rotate(var(--r)) scale(1.05);box-shadow:0 20px 36px rgba(0,0,0,.22);z-index:6;}
+  .card .thumb{height:120px;position:relative;overflow:hidden;}
+  .card .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .card .bar{background:#111114;color:#fff;font-size:13px;font-weight:500;padding:11px 14px;letter-spacing:.04em;}
 
-        /* 头像圆环 */
-        .avatar {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 30px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            box-shadow: 0 0 40px rgba(102, 126, 234, 0.5);
-            animation: pulse 2s ease-in-out infinite;
-        }
+  /* 沿上拱弧线对称分布（整体上移，不遮挡人物） */
+  .c1{left:3%;top:26%;--r:-14deg;}
+  .c2{left:21%;top:10%;--r:-8deg;}
+  .c3{left:50%;top:0;--r:0deg;transform:translateX(-50%) rotate(0deg);}
+  .c3:hover{transform:translateX(-50%) scale(1.05);}
+  .c4{right:21%;top:10%;--r:8deg;}
+  .c5{right:3%;top:26%;--r:14deg;}
 
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.5); }
-            50% { box-shadow: 0 0 60px rgba(102, 126, 234, 0.8); }
-        }
+  .thumb-tone-a{background:linear-gradient(135deg,#3a3d4d,#17181f);}
+  .thumb-tone-b{background:linear-gradient(135deg,#e9e4d8,#cfc8b8);}
+  .thumb-tone-c{background:linear-gradient(135deg,#22303c,#0e161c);}
+  .thumb-tone-d{background:linear-gradient(135deg,#5a4636,#2a2018);}
+  .thumb-tone-e{background:linear-gradient(135deg,#d9d3e6,#b9aecf);}
 
-        h1 {
-            font-size: 42px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ffffff, #a5b4fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
-        }
+  .btn-back{
+    position:fixed;top:22px;left:22px;z-index:10;
+    display:inline-flex;align-items:center;gap:8px;
+    background:#fff;color:var(--ink);border:1px solid var(--line);
+    font-size:14px;font-weight:500;padding:10px 18px;border-radius:999px;cursor:pointer;
+    box-shadow:0 6px 16px rgba(0,0,0,.08);
+    transition:transform .2s ease;
+  }
+  .btn-back:hover{transform:translateY(-2px);}
+  .btn-back svg{width:16px;height:16px;}
 
-        .subtitle {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 40px;
-            font-weight: 300;
-            line-height: 1.6;
-        }
-
-        /* 标签组 */
-        .tags {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            padding: 8px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s ease;
-            cursor: default;
-        }
-
-        .tag:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        /* 按钮组 */
-        .buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-        }
-
-        .btn {
-            padding: 14px 32px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-3px);
-        }
-
-        /* 底部小字 */
-        .footer {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 13px;
-            z-index: 10;
-        }
-    </style>
+  /* ============ 响应式 ============ */
+  @media (max-width:768px){
+    .hero-intro{left:24px;top:24%;}
+    .hero-contact{display:none;}
+    .cta-wrap{right:24px;bottom:36px;}
+    .hero-avatar{height:60%;}
+    .world-stage{position:static;height:auto;display:flex;flex-direction:column;align-items:center;gap:18px;margin-top:24px;}
+    .world-avatar{position:static;transform:none;height:240px;order:-1;}
+    .card{position:static;width:86%;max-width:320px;--r:0deg;transform:none;}
+    .card:hover{transform:none;}
+    .c3{transform:none;}
+  }
+</style>
 </head>
 <body>
-    <!-- 动态光斑 -->
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
 
-    <!-- 主卡片 -->
-    <div class="card">
-        <div class="avatar">🚀</div>
-        <h1>你好，世界</h1>
-        <p class="subtitle">
-            欢迎来到我的个人主页<br>
-            这是我部署的第一个静态网站
-        </p>
-        
-        <div class="tags">
-            <span class="tag">🎨 设计</span>
-            <span class="tag">💻 开发</span>
-            <span class="tag">🌐 部署</span>
-        </div>
+<!-- ================= 视图一：首页 ================= -->
+<section id="hero" class="view active">
+  <div class="hero-inner">
+    <div class="hero-title">HULIAO</div>
 
-        <div class="buttons">
-            <button class="btn btn-primary">开始探索</button>
-            <button class="btn btn-secondary">了解更多</button>
-        </div>
+    <div class="hero-intro">
+      <div class="tag">AI ENTHUSIAST · CREATOR</div>
+      <p>把复杂的想法，<br>变成简单、好玩、能落地的小作品。</p>
     </div>
 
-    <div class="footer">
-        © 2026 · Powered by Netlify
+    <div class="hero-avatar">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/BEjTbFTLzo5GSUxpo15ctPZ4nPg" alt="个人形象">
     </div>
+
+    <div class="hero-contact">
+      <div class="row"><span class="k">姓名</span><span class="v">胡聊</span></div>
+      <div class="row"><span class="k">电话</span><span class="v">185xxxx0000</span></div>
+      <div class="row"><span class="k">地址</span><span class="v">广东 · 广州</span></div>
+      <div class="row"><span class="k">方向</span><span class="v">AI 技术应用 / 创意开发</span></div>
+      <div class="row"><span class="k">状态</span><span class="v">持续学习中</span></div>
+    </div>
+
+    <div class="cta-wrap">
+      <button class="btn-know" id="btnKnow" type="button">
+        认识我
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 视图二：我的奇妙世界 ================= -->
+<section id="world" class="view">
+  <button class="btn-back" id="btnBack" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+    返回首页
+  </button>
+
+  <div class="world-inner">
+    <div class="world-eyebrow">WELCOME TO MY CURIOUS LITTLE UNIVERSE</div>
+    <h1 class="world-title">我的奇妙世界</h1>
+    <p class="world-sub">表面安静，背地里用 AI 折腾各种小项目的逻辑玩家</p>
+
+    <div class="world-stage">
+      <div class="card c1">
+        <div class="thumb thumb-tone-a">
+          <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/ZwYEbK7mIoTDOHxpp8Ic2q0NnDg" alt="AI 视觉识别项目">
+        </div>
+        <div class="bar">AI 视觉识别项目</div>
+      </div>
+
+      <div class="card c2">
+        <div class="thumb thumb-tone-b">
+          <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/GuyvbTONVoGhdDxtlC5cRQhsnJf" alt="前端网页与交互设计">
+        </div>
+        <div class="bar">前端网页与交互设计</div>
+      </div>
+
+      <div class="card c3">
+        <div class="thumb thumb-tone-c">
+          <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/FAxkbuTqkorLQDxDfvocYKGxnLe" alt="自动化脚本与效率工具">
+        </div>
+        <div class="bar">自动化脚本与效率工具</div>
+      </div>
+
+      <div class="card c4">
+        <div class="thumb thumb-tone-d">
+          <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/SIYKb6me4or4xZx61FxcJAbhnrg" alt="智能产品构思与原型">
+        </div>
+        <div class="bar">智能产品构思与原型</div>
+      </div>
+
+      <div class="card c5">
+        <div class="thumb thumb-tone-e">
+          <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Kd3pbf6g6owoGWx6zOccNEVMnDh" alt="3D 视觉与创意内容">
+        </div>
+        <div class="bar">3D 视觉与创意内容</div>
+      </div>
+
+      <div class="world-avatar">
+        <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/BEjTbFTLzo5GSUxpo15ctPZ4nPg" alt="个人形象">
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var hero=document.getElementById('hero');
+  var world=document.getElementById('world');
+  function show(target){
+    hero.classList.toggle('active',target==='hero');
+    world.classList.toggle('active',target==='world');
+    window.scrollTo(0,0);
+  }
+  document.getElementById('btnKnow').addEventListener('click',function(){show('world');});
+  document.getElementById('btnBack').addEventListener('click',function(){show('hero');});
+})();
+</script>
 </body>
 </html>
